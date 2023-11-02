@@ -42,7 +42,7 @@ export const DropdownMenu: React.FC<IDropdownMenuProps> = ({
     <div
       ref={dropdownRef}
       id="dropdown"
-      className={`z-10 absolute top-9 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 ${
+      className={`z-10 absolute top-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-46 dark:bg-gray-700 ${
         position === 'left'
           ? 'left-0'
           : position === 'right'

@@ -30,7 +30,7 @@ export const UserMenu = () => {
             onClick={toggleUserMenu}
           >
             <img
-              className="w-8 h-8 rounded-full"
+              className="w-10 h-10 rounded-full bg-gray-400"
               src={user?.image}
               alt="user photo"
             />

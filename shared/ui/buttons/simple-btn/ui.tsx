@@ -9,7 +9,7 @@ interface ButtonProps {
   style?: 'default' | 'primary';
   onClick?: () => void;
   width?: 'auto' | 'full';
-  customClass: string;
+  customClass?: string;
   as?: ElementType;
 }
 

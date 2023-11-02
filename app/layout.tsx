@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
+import { ComposedProviders } from '@/app/providers/composedProviders';
 
 import Navbar from '@/widgets/navbar/ui';
 
@@ -19,8 +20,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <Navbar />
-        <main>{children}</main>
+        <ComposedProviders>
+          <header className='sticky top-0'>
+            <Navbar />
+          </header>
+          <main>
+            <div className="container mx-auto px-4 py-8">
+              {children}
+            </div>
+          </main>
+        </ComposedProviders>
       </body>
     </html>
   );
