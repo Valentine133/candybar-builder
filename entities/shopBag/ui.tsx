@@ -2,9 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
 
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  selectCart,
-} from '@/shared/lib/redux/slices/cartSlice';
+import { selectCart } from '@/shared/lib/redux/slices/cartSlice';
 
 import { CartList } from '@/entities/cartList';
 import { DropdownMenu } from '@/shared/ui/dropDownMenu';
@@ -19,8 +17,8 @@ export const ShopBag = () => {
   const totalItemCount = items.reduce((total, item) => total + item.count, 0);
 
   const toggleCardBag = useCallback(() => {
-    setShowCardBag((current) => !current);
-  }, []);
+    setShowCardBag(!showCardBag);
+  }, [showCardBag]);
 
   return (
     <div className="flex items-center relative md:order-2">

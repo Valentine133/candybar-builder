@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useEffect } from 'react';
+import React, { ReactNode, useRef, useEffect, useState } from 'react';
 
 interface IDropdownMenuProps {
   visible?: boolean;
@@ -14,25 +14,33 @@ export const DropdownMenu: React.FC<IDropdownMenuProps> = ({
   onClose,
 }) => {
   const dropdownRef = useRef(null);
+  const menuButtonRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Add an event listener to the document to handle clicks outside the menu
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClick = (event: MouseEvent) => {
       if (
-        visible &&
+        menuButtonRef.current &&
+        menuButtonRef.current.contains(event.target)
+      ) {
+        // Clicked the menu button, toggle the menu
+        setIsOpen(!isOpen);
+      } else if (
+        isOpen &&
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target)
       ) {
         // Click occurred outside the menu, close the menu
-        onClose && onClose(); // Call the optional onClose callback
+        onClose && onClose();
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClick);
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClick);
     };
-  }, [visible, onClose]);
+  }, [isOpen, onClose]);
 
   if (!visible) {
     return null;
@@ -41,8 +49,7 @@ export const DropdownMenu: React.FC<IDropdownMenuProps> = ({
   return (
     <div
       ref={dropdownRef}
-      id="dropdown"
-      className={`z-10 absolute top-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-46 dark:bg-gray-700 ${
+      className={`z-10 absolute top-10 min-w-[200px] bg-white divide-y divide-gray-100 rounded-lg shadow w-46 dark:bg-gray-700 ${
         position === 'left'
           ? 'left-0'
           : position === 'right'

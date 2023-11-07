@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={montserrat.className}>
         <ComposedProviders>
-          <header className='sticky top-0'>
+          <header className='sticky top-0 z-50'>
             <Navbar />
           </header>
           <main>
