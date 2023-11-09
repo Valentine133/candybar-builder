@@ -1,9 +1,6 @@
 import React from 'react';
 
 import { CartList } from '@/entities/cartList';
-import { Button } from '@/shared/ui/buttons/simple-btn';
-
-import { HiOutlineTrash } from 'react-icons/hi';
 
 export const Cart = () => {
   return (

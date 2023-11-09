@@ -1,13 +1,15 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface INavbarItemProps {
   label: string;
+  link: string;
 }
 
-export const NavbarItem: React.FC<INavbarItemProps> = ({label}) => {
+export const NavbarItem: React.FC<INavbarItemProps> = ({label, link}) => {
   return (
-    <div className="cursor-pointer hover:text-purple-700 transition">
+    <Link href={link} className="cursor-pointer px-2 py-1 inline-block hover:text-purple-700 transition">
       {label}
-    </div>
+    </Link>
   )
 }

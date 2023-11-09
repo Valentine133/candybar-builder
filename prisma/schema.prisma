@@ -65,4 +65,10 @@ model Product {
   description String
   imgUrl String
   price Int
+  productImages ProductImages[]
+}
+
+type ProductImages {
+  id String
+  productImgUrl String
 }

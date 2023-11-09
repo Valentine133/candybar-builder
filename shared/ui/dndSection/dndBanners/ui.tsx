@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useRef, useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import html2canvas from 'html2canvas';
@@ -13,6 +11,11 @@ export const DndBanners = ({
 }) => {
   const bannerRef = useRef(null);
   const [areImagesLoaded, setImagesLoaded] = useState(false);
+  const [localProductsDrop, setLocalProductsDrop] = useState([]);
+
+   useEffect(() => {
+     setLocalProductsDrop(rightColumnProducts);
+   }, [rightColumnProducts]);
 
   useEffect(() => {
     const productImages = document.querySelectorAll('.product__drop');
@@ -45,7 +48,9 @@ export const DndBanners = ({
   return (
     <div className="banner-wrapper col-span-3">
       <div className="flex justify-between align-items-center py-2 bg-gray-100">
-        <div className="text-xl">Filters</div>
+        <div className="flex align-items-center literal-none text-md font-semibold">
+          Change background image
+        </div>
         <Button
           label="Download image result"
           style="primary"
@@ -62,23 +67,36 @@ export const DndBanners = ({
         }}
         ref={bannerRef}
       >
-        {rightColumnProducts.map((product, index) => (
-          <Draggable key={product.id} bounds="parent">
-            <div
-              className="product__drop w-20 h-20 cursor-pointer absolute"
-              style={{
-                backgroundImage: `url(${product.imgUrl})`,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center center',
-              }}
-            >
-              <button onClick={() => onRemoveFromRightColumn(product)}>
-                Remove
-              </button>
-            </div>
-          </Draggable>
-        ))}
+        {localProductsDrop?.map((product, index) =>
+          Array.from({ length: product.productImages?.length }).map(
+            (_, innerIndex) => (
+              <Draggable key={innerIndex} bounds="parent">
+                <div
+                  className="product__drop w-20 cursor-pointer absolute"
+                  // style={{
+                  //   backgroundImage: `url(${product.productImages[innerIndex].productImgUrl})`,
+                  //   backgroundSize: 'contain',
+                  //   backgroundRepeat: 'no-repeat',
+                  //   backgroundPosition: 'center center',
+                  // }}
+                >
+                  <button
+                    onClick={() =>
+                      onRemoveFromRightColumn(product.productImages[innerIndex])
+                    }
+                  >
+                    Remove
+                  </button>
+                  <img
+                    src={product.productImages[innerIndex].productImgUrl}
+                    alt="fdf"
+                    draggable="false"
+                  />
+                </div>
+              </Draggable>
+            ),
+          ),
+        )}
       </div>
     </div>
   );

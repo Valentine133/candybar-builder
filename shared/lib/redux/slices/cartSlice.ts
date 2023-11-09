@@ -3,12 +3,18 @@ import { RootState } from '../store';
 import { calcTotalPrice } from '@/shared/utils/calcTotalPrice';
 import { setLocalStorage, getLocalStorage } from '@/shared/utils/localStorage';
 
+export type ProductImage = {
+  id: string;
+  productImgUrl: string;
+};
+
 export type CartItem = {
   id: string;
   title: string;
   price: number;
   imgUrl: string;
   count: number;
+  productImages: ProductImage[];
 };
 
 interface CartSliceState {
@@ -28,13 +34,13 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action: PayloadAction<CartItem>) {
-      const { id, title, price, imgUrl } = action.payload;
+      const { id, title, price, imgUrl, productImages } = action.payload;
       const findItem = state.items.find((obj) => obj.id === id);
 
       if (findItem) {
         findItem.count++;
       } else {
-        state.items.push({ id, title, price, imgUrl, count: 1 });
+        state.items.push({ id, title, price, imgUrl, count: 1, productImages });
       }
 
       // Save the updated cart data to local storage

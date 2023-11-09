@@ -18,6 +18,7 @@ type ProductCardProps = {
     description: string;
     imgUrl: string;
     price: number;
+    productImages: string[];
   };
 };
 
@@ -34,6 +35,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       imgUrl: product.imgUrl,
       price: product.price,
       count: 1,
+      productImages: product.productImages || []
     };
     dispatch(addItem(item));
 
