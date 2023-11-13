@@ -1,16 +1,19 @@
 import React, { useCallback, useMemo, FC} from 'react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 import useCurrentUser from '@/shared/hooks/useCurrentUser';
 import useWishlist from '@/shared/hooks/useWishlist';
 
-import {MdFavoriteBorder, MdFavorite} from 'react-icons/md';
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 
 interface WishButtonProps {
   productId: string;
 }
 
 export const WishButton: FC<WishButtonProps> = ({productId}) => {
+  const router = useRouter();
+
   const { mutate: mutateWishlist } = useWishlist();
   const { data: currentUser, mutate} = useCurrentUser();
 
@@ -22,6 +25,11 @@ export const WishButton: FC<WishButtonProps> = ({productId}) => {
 
   const toggleWish = useCallback(async () => {
     let response;
+
+    if (!currentUser) {
+      router.push('/auth');
+      return;
+    }
 
     if (isWish) {
       response = await axios.delete('api/wish', {data: {productId}});
@@ -42,8 +50,8 @@ export const WishButton: FC<WishButtonProps> = ({productId}) => {
   const Icon = isWish ? MdFavorite : MdFavoriteBorder;
 
   return (
-    <div 
-      className="flex items-center justify-center p-1 cursor-pointer h-10 w-10 text-primary rounded-full hover:bg-purple-200 hover:text-white transition" 
+    <div
+      className="flex items-center justify-center p-1 cursor-pointer h-10 w-10 text-primary rounded-full bg-purple-100 hover:bg-purple-200 hover:text-white transition"
       onClick={() => toggleWish()}
     >
       <Icon className="text-primary" size={24} />

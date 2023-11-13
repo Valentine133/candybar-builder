@@ -11,8 +11,8 @@ export const HomePage = () => {
   return (
     <>
       <Banner
-        title="Candybar builder"
-        description="Create you personal party candybar visualization"
+        title="Candy bar builder"
+        description="Create you personal party candy bar visualization"
         backgroundImageUrl={backgroundImageUrl}
         labelBtn="Build a visualization"
         link="/builder"

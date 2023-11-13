@@ -101,7 +101,7 @@ export const DndBanners = ({
               <Draggable key={innerIndex} bounds="parent">
                 <div className="group/item product__drop w-12 md:w-20 cursor-move absolute">
                   <button
-                    className="absolute top-[-0.5rem] right-[-0.5rem] invisible group-hover/item:visible text-white inline-flex items-center justify-center p-1 bg-indigo-500 rounded-md shadow-lg"
+                    className="absolute top-[-0.5rem] right-[-0.5rem] invisible group-hover/item:visible text-white inline-flex items-center justify-center p-1 bg-purple-500 rounded-md shadow-lg"
                     onClick={() =>
                       onRemoveFromRightColumn(product.productImages[innerIndex])
                     }

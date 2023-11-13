@@ -10,7 +10,7 @@ interface ButtonProps {
   onClick?: () => void;
   width?: 'auto' | 'full';
   customClass?: string;
-  as?: React.ElementType | typeof Link;
+  as?: ElementType | typeof Link;
 }
 
 export const Button: React.FC<ButtonProps> = ({

@@ -36,7 +36,7 @@ export const ProductList: React.FC<ProductListProps> = ({
       )}
       {error && <p>Error: {error.message}</p>}
       {products?.length === 0 && <p>No products available.</p>}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 pb-[4rem]">
         {products?.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
