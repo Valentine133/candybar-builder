@@ -5,7 +5,11 @@ import { selectCart } from '@/shared/lib/redux/slices/cartSlice';
 import { DndProducts } from '@/shared/ui/dndSection/dndProducts';
 import { DndBanners } from '@/shared/ui/dndSection/dndBanners';
 
-export const DndDecorView = ({ backgroundImageUrl }) => {
+interface DndDecorViewProps {
+  backgroundImageUrl: string;
+}
+
+export const DndDecorView: React.FC<DndDecorViewProps> = ({ backgroundImageUrl }) => {
   const { items } = useSelector(selectCart);
   const [products, setProducts] = useState(items);
   const [rightColumnProducts, setRightColumnProducts] = useState([]);

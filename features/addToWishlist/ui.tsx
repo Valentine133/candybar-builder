@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import useCurrentUser from '@/shared/hooks/useCurrentUser';
 import useWishlist from '@/shared/hooks/useWishlist';
+import { SparklesAnimation } from '@/shared/ui/buttons/sparklesAnimation';
 
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 
@@ -50,11 +51,13 @@ export const WishButton: FC<WishButtonProps> = ({productId}) => {
   const Icon = isWish ? MdFavorite : MdFavoriteBorder;
 
   return (
-    <div
-      className="flex items-center justify-center p-1 cursor-pointer h-10 w-10 text-primary rounded-full bg-purple-100 hover:bg-purple-200 hover:text-white transition"
-      onClick={() => toggleWish()}
-    >
-      <Icon className="text-primary" size={24} />
-    </div>
+    <SparklesAnimation>
+      <div
+        className="flex items-center justify-center p-1 cursor-pointer h-10 w-10 text-primary rounded-full bg-purple-100 hover:bg-purple-200 hover:text-white transition"
+        onClick={() => toggleWish()}
+      >
+        <Icon className="text-primary" size={24} />
+      </div>
+    </SparklesAnimation>
   );
 }

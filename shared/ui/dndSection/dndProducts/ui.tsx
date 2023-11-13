@@ -17,7 +17,7 @@ export const DndProducts = ({ products, onMove }) => {
       </div>
 
       <div className="dndProducts__wrapper overflow-y-auto md:max-h-[308px] lg:max-h-[416px] xl:max-h-[524px] 2xl:max-h-[632px] p-4">
-        <div className="grid grid-cols-3 md:grid-cols-2 gap-2 ">
+        <div className="grid grid-cols-3 md:grid-cols-2 xl:grid-cols-3 gap-2 ">
           {localProducts && localProducts.length > 0 ? (
             localProducts?.map((product) =>
               Array.from({ length: product.productImages?.length }).map(
@@ -25,15 +25,9 @@ export const DndProducts = ({ products, onMove }) => {
                   <Draggable key={index} onStart={() => false}>
                     <div
                       className="group/item cursor-pointer transition border border-gray-200 rounded-md overflow-hidden"
-                      // style={{
-                      //   backgroundImage: `url(${product.productImages[index].productImgUrl})`,
-                      //   backgroundSize: 'contain',
-                      //   backgroundRepeat: 'no-repeat',
-                      //   backgroundPosition: 'center center',
-                      // }}
                       onClick={() => onMove(product.productImages[index])}
                     >
-                      <div className="w-full h-full absolute inset-0 invisible group-hover/item:visible text-white font-semibold bg-slate-900 bg-opacity-40 flex items-center justify-center p-2">
+                      <div className="w-full h-full absolute inset-0 invisible group-hover/item:visible text-white text-center font-semibold bg-slate-900 bg-opacity-40 flex items-center justify-center p-2">
                         Click me
                       </div>
                       <img
