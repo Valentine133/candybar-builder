@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 
 import { signOut } from 'next-auth/react';
@@ -8,39 +8,33 @@ import { Button } from '@/shared/ui/buttons/simple-btn';
 import { DropdownMenu } from '@/shared/ui/dropDownMenu';
 import { links } from './config';
 
-export const UserMenu = () => {
+export const UserMenu: React.FC = () => {
   const { data: user } = useCurrentUser();
-  const [showUserMenu, setShowUserMenu] = useState(false);
 
-  const toggleUserMenu = useCallback(() => {
-    setShowUserMenu((current) => !current);
-  }, []);
+  const triggerButton = (
+    <button
+      type="button"
+      className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+    >
+      <img
+        className="w-10 h-10 rounded-full bg-gray-400"
+        src={user?.image}
+        alt="user photo"
+      />
+    </button>
+  );
 
   const isAuthenticated = user != null;
 
   return (
     <div className="flex items-center relative md:order-2">
       {!isAuthenticated ? (
-        <Button label="Sign In" href="auth" as="a" customClass="min-w-fit" />
+        <Button href="auth" as="a" customClass="min-w-fit">
+          Sign In
+        </Button>
       ) : (
         <>
-          <button
-            type="button"
-            className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-            onClick={toggleUserMenu}
-          >
-            <img
-              className="w-10 h-10 rounded-full bg-gray-400"
-              src={user?.image}
-              alt="user photo"
-            />
-          </button>
-
-          <DropdownMenu
-            visible={showUserMenu}
-            onClose={() => setShowUserMenu(false)}
-            position="right"
-          >
+          <DropdownMenu button={triggerButton} position="right">
             <div className="px-4 py-3">
               <span className="block text-md text-gray-900 dark:text-white">
                 {user?.name}
@@ -77,4 +71,4 @@ export const UserMenu = () => {
       )}
     </div>
   );
-}
+};

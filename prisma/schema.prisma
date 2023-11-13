@@ -21,6 +21,7 @@ model User {
   updatedAt DateTime @updatedAt
   sessions Session[]
   counts Account[]
+  wishlistIds String[] @db.ObjectId
 }
 
 model Account {

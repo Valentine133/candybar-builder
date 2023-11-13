@@ -1,24 +1,23 @@
 import React, { ReactNode, ElementType } from 'react';
+import Link from 'next/link';
 
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   href?: string;
   select?: boolean;
-  icon?: ReactNode;
-  label: string;
+  children: ReactNode;
   style?: 'default' | 'primary';
   onClick?: () => void;
   width?: 'auto' | 'full';
   customClass?: string;
-  as?: ElementType;
+  as?: React.ElementType | typeof Link;
 }
 
 export const Button: React.FC<ButtonProps> = ({
   type,
   href,
   select,
-  icon,
-  label,
+  children,
   style = 'primary',
   width,
   customClass,
@@ -34,9 +33,21 @@ export const Button: React.FC<ButtonProps> = ({
   }`;
 
   const buttonWidth: string = `w-${width}`;
-  
-  const DEFAULT_ELEMENT: ElementType = 'button';
+
+  const DEFAULT_ELEMENT: React.ElementType = 'button';
   const Element = as || DEFAULT_ELEMENT;
+
+  if (Element === Link) {
+    return (
+      <Link
+        href={href}
+        className={`${buttonClass} ${buttonWidth} ${customClass}`}
+        onClick={onClick}
+      >
+        {children}
+      </Link>
+    );
+  }
 
   return (
     <Element
@@ -46,8 +57,7 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={select ? true : false}
     >
-      {icon}
-      {label}
+      {children}
     </Element>
   );
 };

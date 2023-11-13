@@ -76,11 +76,12 @@ export const AuthForm = () => {
       />
       <Button
         type="submit"
-        label={variant === 'login' ? 'Login' : 'Sign Up'}
         style="primary"
         width="full"
         onClick={variant === 'login' ? login : register}
-      />
+      >
+        {variant === 'login' ? 'Login' : 'Sign Up'}
+      </Button>
 
       <p className="mt-10 text-md text-gray-500">
         {variant === 'login'
@@ -95,19 +96,18 @@ export const AuthForm = () => {
       </p>
 
       <p className="my-3 flex md:w-full items-center before:content-[''] before:w-full before:h-1 before:border-b before:border-gray-200 before:border-1 before:mx-6 xl:before:mx-10 dark:before:border-gray-700 after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-        <span className="flex items-center">
-          or
-        </span>
+        <span className="flex items-center">or</span>
       </p>
 
       <Button
-        icon={<FcGoogle size="30" />}
-        label="Continue with Google"
         style="default"
         width="full"
         customClass="mt-4"
-        onClick={() => signIn('google', {callbackUrl: '/profile'})}
-      />
+        onClick={() => signIn('google', { callbackUrl: '/profile' })}
+      >
+        {<FcGoogle size="30" />}
+        Continue with Google
+      </Button>
     </div>
   );
 };

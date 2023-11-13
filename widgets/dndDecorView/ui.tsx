@@ -29,8 +29,12 @@ export const DndDecorView = ({ backgroundImageUrl }) => {
     ]);
   };
 
+  const onRemoveAllFromRightColumn = (removedProducts) => {
+    setRightColumnProducts([]);
+    setProducts((prevProducts) => [...prevProducts, ...removedProducts]);
+  };
+
   const onRemoveFromRightColumn = (removedImage) => {
-    // Find the product containing the removed image
     const updatedRightColumnProducts = rightColumnProducts.map((product) => {
       const updatedImages = product.productImages.filter(
         (image) => image.id !== removedImage.id,
@@ -50,6 +54,7 @@ export const DndDecorView = ({ backgroundImageUrl }) => {
       <DndProducts products={products} onMove={onMove} />
       <DndBanners
         rightColumnProducts={rightColumnProducts}
+        onRemoveAllFromRightColumn={onRemoveAllFromRightColumn}
         onRemoveFromRightColumn={onRemoveFromRightColumn}
         backgroundImageUrl={backgroundImageUrl}
       />

@@ -18,7 +18,9 @@ export const HomePage = () => {
         link="/builder"
       />
       <div className="py-8"></div>
-      <Catalog title="Catalog" />
+      <div className="container mx-auto px-4">
+        <Catalog title="Catalog" />
+      </div>
     </>
   );
 };

@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import Link from 'next/link';
 
 import { Button } from '@/shared/ui/buttons/simple-btn';
 
@@ -13,7 +14,7 @@ interface IProps {
 export const Banner: FC<IProps> = ({ title, description, backgroundImageUrl, labelBtn, link }) => {
   return (
     <div
-      className="bg-cover bg-center h-[70vh] text-white flex justify-center py-24 px-10 object-fill rounded-xl"
+      className="bg-cover bg-center h-[70vh] text-primary flex justify-center py-24 px-10 object-fill"
       style={{
         backgroundImage: `url(${backgroundImageUrl})`,
       }}
@@ -23,7 +24,9 @@ export const Banner: FC<IProps> = ({ title, description, backgroundImageUrl, lab
           {title}
         </p>
         <p className="text-xl text-center mb-10 leading-none">{description}</p>
-        <Button label={labelBtn} style="primary" as="a" href={link} />
+        <Button style="primary" as={Link} href={link}>
+          {labelBtn}
+        </Button>
       </div>
     </div>
   );

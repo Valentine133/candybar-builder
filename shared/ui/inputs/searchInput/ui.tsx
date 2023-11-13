@@ -4,7 +4,7 @@ import { BsSearch } from 'react-icons/bs';
 
 export const SearchInput = () => {
   return (
-    <form className="relative w-full">
+    <form className="relative w-full lg:min-w-[300px]">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <BsSearch/>
         </div>

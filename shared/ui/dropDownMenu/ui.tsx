@@ -1,63 +1,72 @@
-import React, { ReactNode, useRef, useEffect, useState } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  ReactNode,
+  ReactElement,
+} from 'react';
 
-interface IDropdownMenuProps {
-  visible?: boolean;
-  children?: ReactNode;
+interface DropdownProps {
+  button: ReactElement;
+  children: ReactNode;
   position?: 'left' | 'right' | 'center';
-  onClose?: () => void;
 }
 
-export const DropdownMenu: React.FC<IDropdownMenuProps> = ({
-  visible,
-  children,
-  position,
-  onClose,
-}) => {
-  const dropdownRef = useRef(null);
-  const menuButtonRef = useRef(null);
+export const DropdownMenu: React.FC<DropdownProps> = ({ button, children, position }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      buttonRef.current &&
+      !dropdownRef.current.contains(event.target as Node) &&
+      !buttonRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
 
   useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (
-        menuButtonRef.current &&
-        menuButtonRef.current.contains(event.target)
-      ) {
-        // Clicked the menu button, toggle the menu
-        setIsOpen(!isOpen);
-      } else if (
-        isOpen &&
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
-        // Click occurred outside the menu, close the menu
-        onClose && onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClick);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, onClose]);
+  }, []);
 
-  if (!visible) {
-    return null;
-  }
+  const handleItemClick = () => {
+    setIsOpen(false);
+  };
 
   return (
-    <div
-      ref={dropdownRef}
-      className={`z-10 absolute top-10 min-w-[200px] bg-white divide-y divide-gray-100 rounded-lg shadow w-46 dark:bg-gray-700 ${
-        position === 'left'
-          ? 'left-0'
-          : position === 'right'
-          ? 'right-0'
-          : 'left-1/2 transform -translate-x-1/2'
-      }`}
-    >
-      {children}
+    <div className="relative inline-block text-left">
+      {button &&
+        React.cloneElement(button, {
+          onClick: () => setIsOpen(!isOpen),
+          ref: buttonRef,
+        })}
+      {isOpen && (
+        <div
+          className={`origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 ${
+            position === 'left'
+              ? 'left-0'
+              : position === 'right'
+              ? 'right-0'
+              : 'left-1/2 transform -translate-x-1/2'
+          }`}
+          ref={dropdownRef}
+        >
+          <div className="py-1">
+            {React.Children.map(children, (child) =>
+              React.isValidElement(child)
+                ? React.cloneElement(child, { onClick: handleItemClick })
+                : child,
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 import { ComposedProviders } from '@/app/providers/composedProviders';
 
-import Navbar from '@/widgets/navbar/ui';
+import { Navbar } from '@/widgets/navbar';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -17,18 +17,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <body className={montserrat.className}>
         <ComposedProviders>
-          <header className='sticky top-0 z-50'>
+          <header className="sticky top-0 z-50">
             <Navbar />
           </header>
-          <main>
-            <div className="container mx-auto px-4 py-8">
-              {children}
-            </div>
-          </main>
+          <main className="pb-8">{children}</main>
         </ComposedProviders>
       </body>
     </html>

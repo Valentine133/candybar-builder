@@ -9,7 +9,7 @@ export default async function getAllProducts (req: NextApiRequest, res: NextApiR
       return res.status(405).end();
     }
 
-    await serverAuth(req);
+    await serverAuth(req, res);
 
     const products = await prismadb.product.findMany();
 
