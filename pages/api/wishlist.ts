@@ -23,4 +23,4 @@ export default async function hendler(req: NextApiRequest, res: NextApiResponse)
   } catch (err) {
     return res.status(500).end();
   }
-};
+}
