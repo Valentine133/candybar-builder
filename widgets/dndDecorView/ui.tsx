@@ -5,6 +5,8 @@ import { selectCart } from '@/shared/lib/redux/slices/cartSlice';
 import { DndProducts } from '@/shared/ui/dndSection/dndProducts';
 import { DndBanners } from '@/shared/ui/dndSection/dndBanners';
 
+import { Product, ProductImage } from '@/shared/lib/types/product';
+
 interface DndDecorViewProps {
   backgroundImageUrl: string;
 }
@@ -12,13 +14,15 @@ interface DndDecorViewProps {
 export const DndDecorView: React.FC<DndDecorViewProps> = ({ backgroundImageUrl }) => {
   const { items } = useSelector(selectCart);
   const [products, setProducts] = useState(items);
-  const [rightColumnProducts, setRightColumnProducts] = useState([]);
+  const [rightColumnProducts, setRightColumnProducts] = useState<
+    { id: string; productImages: ProductImage[] }[]
+  >([]);
   
   useEffect(() => {
     setProducts(items);
   }, [items]);
 
-  const onMove = (movedImage) => {
+  const onMove = (movedImage: ProductImage) => {
     const updatedProducts = products.map((product) => {
       const updatedImages = product.productImages.filter(
         (image) => image.id !== movedImage.id,
@@ -27,6 +31,7 @@ export const DndDecorView: React.FC<DndDecorViewProps> = ({ backgroundImageUrl }
     });
 
     setProducts(updatedProducts);
+
     setRightColumnProducts((prevProducts) => [
       ...prevProducts,
       { id: movedImage.id, productImages: [movedImage] },

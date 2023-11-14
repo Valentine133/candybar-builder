@@ -30,7 +30,7 @@ export const UserMenu: React.FC = () => {
     <div className="flex items-center relative md:order-2">
       {!isAuthenticated ? (
         <Button href="auth" as="a" customClass="min-w-fit">
-          Sign In
+          Sign In/On
         </Button>
       ) : (
         <>

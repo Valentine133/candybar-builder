@@ -2,45 +2,32 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { calcTotalPrice } from '@/shared/utils/calcTotalPrice';
 import { setLocalStorage, getLocalStorage } from '@/shared/utils/localStorage';
-
-export type ProductImage = {
-  id: string;
-  productImgUrl: string;
-};
-
-export type CartItem = {
-  id: string;
-  title: string;
-  price: number;
-  imgUrl: string;
-  count: number;
-  productImages: ProductImage[];
-};
+import { Product } from '@/shared/lib/types/product';
 
 interface CartSliceState {
   totalPrice: number;
-  items: CartItem[];
+  items: Product[];
 }
 
 // Load cart data from local storage
-const storedCart = getLocalStorage('cart');
+const storedCart: Product[] = getLocalStorage('cart') || [];
 const initialState: CartSliceState = {
-  totalPrice: calcTotalPrice(storedCart || []),
-  items: storedCart || [],
+  totalPrice: calcTotalPrice(storedCart),
+  items: storedCart,
 };
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addItem(state, action: PayloadAction<CartItem>) {
-      const { id, title, price, imgUrl, productImages } = action.payload;
+    addItem(state, action: PayloadAction<Product>) {
+      const { id, title, price, imgUrl, description, productImages } = action.payload;
       const findItem = state.items.find((obj) => obj.id === id);
 
       if (findItem) {
         findItem.count++;
       } else {
-        state.items.push({ id, title, price, imgUrl, count: 1, productImages });
+        state.items.push({ id, title, price, imgUrl, description, count: 1, productImages });
       }
 
       // Save the updated cart data to local storage

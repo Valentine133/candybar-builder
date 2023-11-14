@@ -1,27 +1,20 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  CartItem,
   addItem,
   selectCartItemById,
 } from '@/shared/lib/redux/slices/cartSlice';
 import { setLocalStorage, getLocalStorage } from '@/shared/utils/localStorage';
 import { openModal } from '@/shared/lib/redux/slices/modalSlice';
 import Link from 'next/link';
+import { Product } from '@/shared/lib/types/product';
 
 import { Button } from '@/shared/ui/buttons/simple-btn';
 import { WishButton } from '@/features/addToWishlist';
 import { BsFillCartCheckFill, BsCart } from 'react-icons/bs';
 
 type ProductCardProps = {
-  product: {
-    id: string;
-    title: string;
-    description: string;
-    imgUrl: string;
-    price: number;
-    productImages: string[];
-  };
+  product: Product;
 };
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -34,17 +27,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     if (existingItem) {
       dispatch(openModal());
     } else {
-      const item: CartItem = {
+      const item: Product = {
         id: product.id,
         title: product.title,
         imgUrl: product.imgUrl,
+        description: product.description,
         price: product.price,
         count: 1,
         productImages: product.productImages || [],
       };
       dispatch(addItem(item));
 
-      const updatedCart = getLocalStorage('cart') || [];
+      const updatedCart: Product[] = getLocalStorage('cart') || [];
       updatedCart.push(item);
       setLocalStorage('cart', updatedCart);
     }

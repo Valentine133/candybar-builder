@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/compose-function": "^0.0.33",
     "@types/lodash": "^4.14.200",
     "@types/node": "latest",
     "@types/react": "latest",

@@ -21,18 +21,18 @@ export const CartList = () => {
 
   const total = calcTotalPrice(items);
 
-  const onClickPlus = (id) => {
-    dispatch(addItem({ id })); // Pass the item id as a payload
+  const onClickPlus = (id: string) => {
+    dispatch(addItem({ id }));
   };
 
-  const onClickMinus = (id) => {
+  const onClickMinus = (id: string) => {
     const item = items.find((obj) => obj.id === id);
     if (item && item.count > 1) {
-      dispatch(minusItem(id)); // Pass the item id as a payload
+      dispatch(minusItem(id));
     }
   };
 
-  const handleRemoveItem = (id) => {
+  const handleRemoveItem = (id: string) => {
     dispatch(removeItem(id));
   };
 
@@ -78,7 +78,7 @@ export const CartList = () => {
                   type="number"
                   max="100"
                   className="flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-white outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none text-md hover:text-black"
-                  placeholder={item.count}
+                  placeholder={item.count.toString()}
                 />
                 <button
                   className="w-20 h-full text-gray-600 bg-white border-l rounded-r outline-none cursor-pointer dark:border-gray-700 hover:text-gray-700 hover:bg-gray-300"

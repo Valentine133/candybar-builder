@@ -2,9 +2,16 @@ import React, { useEffect, useState } from 'react';
 // import { useSelector } from 'react-redux';
 import Draggable from 'react-draggable';
 
-export const DndProducts = ({ products, onMove }) => {
+import { Product, ProductImage } from '@/shared/lib/types/product';
+
+type DndProductsProps = {
+  products: Product[];
+  onMove: (movedImage: ProductImage) => void;
+};
+
+export const DndProducts: React.FC<DndProductsProps> = ({ products, onMove }) => {
   // const cartItems = useSelector((state) => state.cart.items);
-  const [localProducts, setLocalProducts] = useState([]);
+  const [localProducts, setLocalProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     setLocalProducts(products);
@@ -27,12 +34,12 @@ export const DndProducts = ({ products, onMove }) => {
                       className="group/item cursor-pointer transition border border-gray-200 rounded-md overflow-hidden"
                       onClick={() => onMove(product.productImages[index])}
                     >
-                      <div className="w-full h-full absolute inset-0 invisible group-hover/item:visible text-white text-center font-semibold bg-slate-900 bg-opacity-40 flex items-center justify-center p-2">
+                      <div className="w-full h-full absolute inset-0 invisible group-hover/item:visible text-white text-center leading-none font-semibold bg-purple-900 bg-opacity-60 transition flex items-center justify-center p-2">
                         Click me
                       </div>
                       <img
                         src={product.productImages[index].productImgUrl}
-                        alt="fdf"
+                        alt="stuff"
                         draggable="false"
                       />
                     </div>

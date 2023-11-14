@@ -1,17 +1,12 @@
 import React from 'react';
 import { ProductCard } from '@/entities/product';
+import { Product } from '@/shared/lib/types/product';
+
 import { SkeletonProduct } from '@/shared/ui/skeleton/skeletonProduct';
 
 type ProductListProps = {
   title: string;
-  products: Array<{
-    id: string;
-    title: string;
-    description: string;
-    imgUrl: string;
-    price: number;
-    productImages: string[];
-  }>;
+  products: Array<Product>;
   error: any;
   isLoading: boolean;
 };
