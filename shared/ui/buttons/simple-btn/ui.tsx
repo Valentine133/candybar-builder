@@ -1,7 +1,7 @@
 import React, { ReactNode, ElementType } from 'react';
 import Link from 'next/link';
 
-interface ButtonProps {
+export interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   href?: string;
   select?: boolean;

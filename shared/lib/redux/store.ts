@@ -3,11 +3,13 @@ import { useDispatch } from 'react-redux';
 
 import cart from './slices/cartSlice';
 import modal from './slices/modalSlice';
+import filter from './slices/filterSlice';
 
 export const store = configureStore({
   reducer: { 
     cart,
     modal,
+    filter,
   },
 })
 

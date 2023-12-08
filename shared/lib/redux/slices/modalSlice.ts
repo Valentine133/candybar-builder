@@ -1,29 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface ModalState {
-  isOpen: boolean;
+  modals: Record<string, boolean>;
 }
 
 const initialState: ModalState = {
-  isOpen: false,
+  modals: {},
 };
 
 const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openModal: (state) => {
-      state.isOpen = true;
+    openModal: (state, action) => {
+      const { modalName } = action.payload;
+      state.modals[modalName] = true;
     },
-    closeModal: (state) => {
-      state.isOpen = false;
+    closeModal: (state, action) => {
+      const { modalName } = action.payload;
+      state.modals[modalName] = false;
     },
-    toggleModal: (state) => {
-      state.isOpen = !state.isOpen;
+    toggleModal: (state, action) => {
+      const { modalName } = action.payload;
+      state.modals[modalName] = !state.modals[modalName];
     },
   },
 });
 
 export const { openModal, closeModal, toggleModal } = modalSlice.actions;
-export const selectIsOpen = (state: { modal: ModalState }) => state.modal.isOpen;
+export const selectIsOpen = (modalName: string) => (state: { modal: ModalState }) =>
+  state.modal.modals[modalName] || false;
 export default modalSlice.reducer;

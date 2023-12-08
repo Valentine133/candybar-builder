@@ -11,7 +11,7 @@ export default async function getAllProducts (req: NextApiRequest, res: NextApiR
 
     await serverAuth(req, res);
 
-    const products = await prismadb.product.findMany();
+     const products = await prismadb.product.findMany();
 
     return res.status(200).json(products);
   } catch (err) {

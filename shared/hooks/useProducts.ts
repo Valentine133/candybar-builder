@@ -1,19 +1,26 @@
-import useSWR from 'swr';
+'use client'
 
+import useSWR from 'swr';
 import fetcher from '@/shared/lib/fetcher/fetcher';
 
-const useProducts = () => {
-  const { data, error, isLoading } = useSWR('/api/products', fetcher, {
+type UseProductsOptions = {
+  endpoint: string;
+};
+
+const useProducts = ({ endpoint }: UseProductsOptions) => {
+  const { data, error } = useSWR(endpoint, fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
 
+  const isLoading = !data && !error;
+
   return {
     data,
     error,
-    isLoading
-  }
+    isLoading,
+  };
 };
 
 export default useProducts;

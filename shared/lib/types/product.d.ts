@@ -11,4 +11,7 @@ export type Product = {
   description: string;
   count: number;
   productImages: ProductImage[];
+  category: number;
+  theme: string[];
+  type: string[];
 };

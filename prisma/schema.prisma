@@ -67,6 +67,9 @@ model Product {
   imgUrl String
   price Int
   productImages ProductImages[]
+  category Int
+  theme String[]
+  type String[]
 }
 
 type ProductImages {

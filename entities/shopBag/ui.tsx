@@ -11,7 +11,7 @@ export const ShopBag = () => {
   const totalItemCount = items.reduce((total, item) => total + item.count, 0);
 
   const handleToogleCartModal = () => {
-    dispatch(toggleModal());
+    dispatch(toggleModal({ modalName: 'cartModal' }));
   };
 
   return (
