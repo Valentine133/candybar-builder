@@ -26,7 +26,9 @@ export default function RootLayout({
           <header className="sticky top-0 z-50">
             <Navbar />
           </header>
-          <main className="overflow-hidden">{children}</main>
+          <main className="overflow-hidden md:overflow-visible">
+            {children}
+          </main>
           <footer>
             <Footer>
               ©2023 Copyright:{' '}

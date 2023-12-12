@@ -4,27 +4,22 @@ import { openModal } from '@/shared/lib/redux/slices/modalSlice';
 import { setLocalStorage, getLocalStorage } from '@/shared/utils/localStorage';
 import { Product } from '@/shared/lib/types/product';
 
-const useAddToCart = (product: Product) => {
+const useAddToCart = (product: Product, id, selectedOption) => {
   const dispatch = useDispatch();
-  const cartItem = useSelector(selectCartItemById(product?.id));
+  const cartItem = useSelector(selectCartItemById(id));
 
   const onClickAdd = () => {
     const existingItem = cartItem;
-
+    console.log(id)
+    
     if (existingItem) {
-      dispatch(openModal());
+      dispatch(openModal({ modalName: 'cartModal' }));
     } else {
       const item = {
-        id: product.id,
-        title: product.title,
-        imgUrl: product.imgUrl,
-        description: product.description,
-        price: product.price,
+        id,
         count: 1,
-        productImages: product.productImages || [],
-        category: product.category,
-        theme: product.theme,
-        type: product.type,
+        selectedOption: selectedOption,
+        ...product,
       };
       dispatch(addItem(item));
 

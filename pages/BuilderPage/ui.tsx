@@ -8,7 +8,7 @@ import { DndDecorView } from '@/widgets/dndDecorView';
 import { Cart } from '@/widgets/cart';
 
 export const BuilderPage = () => {
-
+  const endpoint = '/api/products?populate=*';
   const [backgroundImageUrl] = useState('images/empty-template-1.jpg');
 
   return (
@@ -16,7 +16,7 @@ export const BuilderPage = () => {
       <DndDecorView backgroundImageUrl={backgroundImageUrl} />
       <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3 mt-8 mb-8">
         <div className="col-span-2 xl:col-span-3">
-          <Catalog title="Catalog" />
+          <Catalog title="Catalog" endpoint={endpoint} />
         </div>
         <div className="col-span-1">
           <div className="sticky top-[6rem]">

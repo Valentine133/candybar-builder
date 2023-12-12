@@ -11,30 +11,33 @@ interface DndDecorViewProps {
   backgroundImageUrl: string;
 }
 
-export const DndDecorView: React.FC<DndDecorViewProps> = ({ backgroundImageUrl }) => {
+export const DndDecorView: React.FC<DndDecorViewProps> = ({
+  backgroundImageUrl,
+}) => {
   const { items } = useSelector(selectCart);
   const [products, setProducts] = useState(items);
-  const [rightColumnProducts, setRightColumnProducts] = useState<
-    { id: string; productImages: ProductImage[] }[]
-  >([]);
-  
+  const [rightColumnProducts, setRightColumnProducts] = useState<{
+    id: string;
+    image: { data: ProductImage[] }[];
+  }>([]);
+
   useEffect(() => {
     setProducts(items);
   }, [items]);
 
-  const onMove = (movedImage: ProductImage) => {
+  const onMove = (movedImage: ProductImage, index: number) => {
     const updatedProducts = products.map((product) => {
-      const updatedImages = product.productImages.filter(
+      const updatedImages = product?.image?.data?.filter(
         (image) => image.id !== movedImage.id,
       );
-      return { ...product, productImages: updatedImages };
+      return { ...product, image: { data: updatedImages } };
     });
 
     setProducts(updatedProducts);
 
     setRightColumnProducts((prevProducts) => [
       ...prevProducts,
-      { id: movedImage.id, productImages: [movedImage] },
+      { id: movedImage.id, image: { data: [movedImage] } },
     ]);
   };
 
@@ -43,18 +46,18 @@ export const DndDecorView: React.FC<DndDecorViewProps> = ({ backgroundImageUrl }
     setProducts((prevProducts) => [...prevProducts, ...removedProducts]);
   };
 
-  const onRemoveFromRightColumn = (removedImage) => {
+  const onRemoveFromRightColumn = (removedImage, index) => {
     const updatedRightColumnProducts = rightColumnProducts.map((product) => {
-      const updatedImages = product.productImages.filter(
+      const updatedImages = product?.image?.data?.filter(
         (image) => image.id !== removedImage.id,
       );
-      return { ...product, productImages: updatedImages };
+      return { ...product, image: { data: updatedImages } };
     });
 
     setRightColumnProducts(updatedRightColumnProducts);
     setProducts((prevProducts) => [
       ...prevProducts,
-      { id: removedImage.id, productImages: [removedImage] },
+      { id: removedImage.id, image: { data: [removedImage] } },
     ]);
   };
 

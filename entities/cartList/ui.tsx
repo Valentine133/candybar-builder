@@ -56,15 +56,79 @@ export const CartList = () => {
           key={item.id}
           className="cart__item p-2 flex bg-white border-b border-gray-100"
         >
+          {/* <>{console.log(item)}</> */}
           <div className="cart__item--image pr-2 w-32">
             <Link href="#">
-              <img src={item.imgUrl} alt={item.title} />
+              <img
+                className="rounded-lg object-cover aspect-square"
+                src={item?.thumbnail?.data?.attributes.url}
+                alt={item.title}
+              />
             </Link>
           </div>
           <div className="cart__item--body flex justify-between w-full">
             <div className="cart__item--title flex flex-col w-full text-sm">
               <div className="font-bold">
                 <Link href="#">{item.title}</Link>
+              </div>
+              <div className="options">
+                {item?.options &&
+                  Object.entries(item.options).map(([optionKey, optionValue]) => {
+                    if (optionKey === 'id') {
+                      return null;
+                    }
+
+                    return (
+                      optionValue != null && (
+                        <div key={optionKey} className="option mb-1">
+                          {/* Nested level */}
+                          <label className="mb-1 mr-2 font-medium text-gray-500">
+                            {optionValue?.title}:
+                          </label>
+                          {Object.entries(optionValue).map(
+                            ([nestedKey, nestedValue]) => (
+                              Array.isArray(nestedValue) && (
+                                <select key={nestedKey} className="nested-option">
+                                  {nestedValue.map((item, i) => (
+                                  <option key={i} 
+                                          value={item.name}
+                                          // selected={}
+                                          >
+                                    {item.name}
+                                  </option>
+                                  // <button
+                                  //   key={i}
+                                  //   className={`${
+                                  //     item.selectedOption[nestedKey] === i
+                                  //       ? 'border-purple-600 text-purple-600 bg-purple-100 hover:border-purple-600'
+                                  //       : ''
+                                  //   } p-2 mb-2 mr-1 rounded-md border hover:border-gray-800`}
+                                  //   onClick={() => {
+                                  //     item.setSelectedOption((prevState) => ({
+                                  //       ...prevState,
+                                  //       [nestedKey]: i,
+                                  //     }));
+                                  //   }}
+                                  // >
+                                  //   {item.name}
+                                  // </button>
+                                ))}
+                                </select>
+                              )
+                            ),
+                          )}
+                        </div>
+                      )
+                    );
+                  })}
+
+                {/* {Object.entries(item.selectedOption).map(
+                  ([optionKey, optionValue]) => (
+                    <div className="">
+                      {optionKey}: {optionValue}
+                    </div>
+                  ),
+                )} */}
               </div>
               <div className="cart__item-count mt-auto relative flex flex-row w-[7rem] h-8 bg-transparent border border-gray-300 rounded-lg overflow-hidden">
                 <button

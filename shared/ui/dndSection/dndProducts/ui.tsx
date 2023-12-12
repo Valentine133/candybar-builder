@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { useSelector } from 'react-redux';
+import Image from 'next/image';
 import Draggable from 'react-draggable';
 
 import { Product, ProductImage } from '@/shared/lib/types/product';
@@ -12,7 +12,7 @@ type DndProductsProps = {
 export const DndProducts: React.FC<DndProductsProps> = ({ products, onMove }) => {
   // const cartItems = useSelector((state) => state.cart.items);
   const [localProducts, setLocalProducts] = useState<Product[]>([]);
-
+  console.log(products[0]);
   useEffect(() => {
     setLocalProducts(products);
   }, [products]);
@@ -27,19 +27,22 @@ export const DndProducts: React.FC<DndProductsProps> = ({ products, onMove }) =>
         <div className="grid grid-cols-3 md:grid-cols-2 xl:grid-cols-3 gap-2 ">
           {localProducts && localProducts.length > 0 ? (
             localProducts?.map((product) =>
-              Array.from({ length: product.productImages?.length }).map(
+              Array.from({ length: product?.image?.data?.length }).map(
                 (_, index) => (
                   <Draggable key={index} onStart={() => false}>
                     <div
                       className="group/item cursor-pointer transition border border-gray-200 rounded-md overflow-hidden"
-                      onClick={() => onMove(product.productImages[index])}
+                      onClick={() => onMove(product?.image?.data?.[index])}
                     >
                       <div className="w-full h-full absolute inset-0 invisible group-hover/item:visible text-white text-center leading-none font-semibold bg-purple-900 bg-opacity-60 transition flex items-center justify-center p-2">
                         Click me
                       </div>
-                      <img
-                        src={product.productImages[index].productImgUrl}
-                        alt="stuff"
+                      <Image
+                        width={200}
+                        height={200}
+                        src={product?.image?.data?.[index].attributes.url}
+                        alt={product?.image?.data?.[index].attributes.name}
+                        className="object-cover aspect-square rounded-md"
                         draggable="false"
                       />
                     </div>

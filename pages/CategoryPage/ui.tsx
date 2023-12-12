@@ -15,14 +15,10 @@ export const CategoryPage = ({
   };
   products: any;
 }) => {
-  const {
-    data: category,
-    isLoading,
-    error,
-  } = useCategory(params.categorySlug as string);
   const slug = params.categorySlug;
-
+  const { data: category, isLoading, error } = useCategory(slug as string);
   const c = category?.data?.[0]?.attributes;
+  
 
   return (
     <div className="container mx-auto px-4 py-10">

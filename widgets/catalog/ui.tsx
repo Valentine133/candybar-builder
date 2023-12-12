@@ -17,8 +17,6 @@ export const Catalog: React.FC<ProductsProps> = ({ title, endpoint, slug }) => {
     : '';
   const fullEndpoint = `${endpoint}${categoryFilter}`;
 
-  console.log('Catalog:', fullEndpoint);
-
   const {
     data: products,
     error,

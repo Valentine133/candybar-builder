@@ -7,6 +7,7 @@ import { Catalog } from '@/widgets/catalog';
 
 export const HomePage = () => {
   const [backgroundImageUrl] = useState('images/candy-bar-2.jpg');
+  const endpoint = '/api/products?populate=*';
   
   return (
     <>
@@ -19,7 +20,7 @@ export const HomePage = () => {
       />
       <div className="py-8"></div>
       <div className="container mx-auto px-4">
-        <Catalog title="Catalog" />
+        <Catalog title="Popular products" endpoint={endpoint} />
       </div>
     </>
   );

@@ -21,13 +21,13 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action: PayloadAction<Product>) {
-      const { id, title, price, imgUrl, description, productImages } = action.payload;
+      const { id, ...items } = action.payload;
       const findItem = state.items.find((obj) => obj.id === id);
 
       if (findItem) {
         findItem.count++;
       } else {
-        state.items.push({ id, title, price, imgUrl, description, count: 1, productImages });
+        state.items.push({ id, ...items });
       }
 
       // Save the updated cart data to local storage
