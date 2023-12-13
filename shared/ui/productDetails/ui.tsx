@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Product } from '@/shared/lib/types/product';
-import useAddToCart from '@/shared/hooks/useAddToCart';
 
 import { ProductDetailsCarousel } from '@/shared/ui/productDetailsCarousel';
-import { Button } from '@/shared/ui/buttons/simple-btn';
+import { AddToCartButton } from '@/features/addToCartButton';
 import Image from 'next/image';
-import { BsFillCartCheckFill, BsCart } from 'react-icons/bs';
 import Head from 'next/head';
 import { getDiscountedPricePercentage } from '@/shared/utils/getDiscountedPricePercentage';
 
@@ -22,38 +20,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   const [selectedOption, setSelectedOption] = useState({});
   const [showError, setShowError] = useState(false);
 
-  const { onClickAdd, isItemInCart } = useAddToCart(p, id, selectedOption);
-
   console.log(p);
-
- const countNestedProperties = (obj) => {
-   return obj
-     ? Object.values(obj).reduce((count, value) => {
-         if (
-           typeof value === 'object' &&
-           value !== null &&
-           !Array.isArray(value)
-         ) {
-           count += 1; // Count the nested object itself
-         }
-         return count;
-       }, 0)
-     : 0;
- };
-
- const numberOfNestedProperties = countNestedProperties(p?.options);
-
-
-  const handleAddToCart = () => {
-    console.log("First:", numberOfNestedProperties);
-    console.log("Second", Object.keys(selectedOption).length);
-    if (numberOfNestedProperties == Object.keys(selectedOption).length) {
-      onClickAdd();
-    } else {
-      setShowError(true);
-    }
-  };
-
 
   return (
     <>
@@ -269,17 +236,12 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                     </button>
                   </div>
                 </div>
-                <Button
-                  as="button"
-                  customClass="min-w-fit"
-                  onClick={handleAddToCart}
-                >
-                  {isItemInCart ? (
-                    <BsFillCartCheckFill size="20" />
-                  ) : (
-                    <BsCart size="20" />
-                  )}
-                </Button>
+                <AddToCartButton
+                  product={p}
+                  id={id}
+                  selectedOption={selectedOption}
+                  error={setShowError}
+                />
               </div>
             </div>
           </div>

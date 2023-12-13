@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, selectCartItemById } from '@/shared/lib/redux/slices/cartSlice';
 import { openModal } from '@/shared/lib/redux/slices/modalSlice';
@@ -8,9 +9,17 @@ const useAddToCart = (product: Product, id, selectedOption) => {
   const dispatch = useDispatch();
   const cartItem = useSelector(selectCartItemById(id));
 
+  useEffect(() => {
+    if (cartItem) {
+      // Update local storage after Redux state is updated
+      const updatedCart = getLocalStorage('cart') || [];
+      updatedCart.push(cartItem);
+      setLocalStorage('cart', updatedCart);
+    }
+  }, [cartItem]);
+  
   const onClickAdd = () => {
     const existingItem = cartItem;
-    console.log(id)
     
     if (existingItem) {
       dispatch(openModal({ modalName: 'cartModal' }));
@@ -22,6 +31,7 @@ const useAddToCart = (product: Product, id, selectedOption) => {
         ...product,
       };
       dispatch(addItem(item));
+      dispatch(openModal({ modalName: 'cartModal' }));
 
       const updatedCart = getLocalStorage('cart') || [];
       updatedCart.push(item);

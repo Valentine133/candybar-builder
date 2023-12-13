@@ -18,7 +18,7 @@
 }
 .productCarousel.carousel-root .carousel .thumb {
     /* height: 60px; */
-    border-radius: 6px;
+    border-radius: 10px;
     overflow: hidden;
     position: relative;
 }
@@ -39,15 +39,21 @@
     opacity: 0;
 }
 .productCarousel.carousel-root .carousel .thumb.selected,
+.productCarousel.carousel-root .carousel .thumb.selected:hover {
+  border: 2px solid purple;
+}
+
 .productCarousel.carousel-root .carousel .thumb:hover {
-    border: 0;
+  border: 0;
 }
 .productCarousel.carousel-root .carousel .thumb:hover:after,
 .productCarousel.carousel-root .carousel .thumb.selected:after {
     opacity: 0.2;
 }
-.productCarousel .control-arrow {
-    display: none;
+.productCarousel.carousel-root .carousel .control-arrow {
+  height: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 @media screen and (max-width: 767px) {
     .productCarousel.carousel-root {

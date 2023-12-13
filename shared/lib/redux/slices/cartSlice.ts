@@ -63,6 +63,14 @@ const cartSlice = createSlice({
       setLocalStorage('cart', []);
       state.totalPrice = 0;
     },
+    updateSelectedItemOptions: (state, action) => {
+      const { id, selectedOption } = action.payload;
+      const selectedItem = state.items.find((item) => item.id === id);
+
+      if (selectedItem) {
+        selectedItem.selectedOption = selectedOption;
+      }
+    },
   },
 });
 
@@ -70,6 +78,6 @@ export const selectCart = (state: RootState) => state.cart;
 export const selectCartItemById = (id: string) => (state: RootState) =>
   state.cart.items.find((obj) => obj.id === id);
 
-export const { addItem, removeItem, minusItem, clearItems } = cartSlice.actions;
+export const { addItem, removeItem, minusItem, clearItems, updateSelectedItemOptions } = cartSlice.actions;
 
 export default cartSlice.reducer;
