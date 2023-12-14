@@ -3,10 +3,17 @@ import { RootState } from '../store';
 import { calcTotalPrice } from '@/shared/utils/calcTotalPrice';
 import { setLocalStorage, getLocalStorage } from '@/shared/utils/localStorage';
 import { Product } from '@/shared/lib/types/product';
+import isEqual from 'lodash/isEqual';
 
 interface CartSliceState {
   totalPrice: number;
   items: Product[];
+}
+
+interface UpdateSelectedItemOptionsPayload {
+  id: string;
+  selectedOption: string;
+  count?: number;
 }
 
 // Load cart data from local storage
@@ -21,13 +28,13 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action: PayloadAction<Product>) {
-      const { id, ...items } = action.payload;
+      const { id, selectedOption, ...items } = action.payload;
       const findItem = state.items.find((obj) => obj.id === id);
 
-      if (findItem) {
+      if (findItem && isEqual(findItem.selectedOption, selectedOption)) {
         findItem.count++;
       } else {
-        state.items.push({ id, ...items });
+        state.items.push({ id, selectedOption, ...items });
       }
 
       // Save the updated cart data to local storage
@@ -63,12 +70,16 @@ const cartSlice = createSlice({
       setLocalStorage('cart', []);
       state.totalPrice = 0;
     },
-    updateSelectedItemOptions: (state, action) => {
-      const { id, selectedOption } = action.payload;
-      const selectedItem = state.items.find((item) => item.id === id);
+    updateSelectedItemOptions: (state, action: PayloadAction<UpdateSelectedItemOptionsPayload>) => {
+      const { id, selectedOption, count } = action.payload;
+      const selectedItem = state.items.find((item) => item.id === id && isEqual(item.selectedOption, selectedOption));
 
       if (selectedItem) {
         selectedItem.selectedOption = selectedOption;
+
+        if (count !== undefined) {
+          selectedItem.count = count;
+        }
       }
     },
   },
@@ -77,6 +88,8 @@ const cartSlice = createSlice({
 export const selectCart = (state: RootState) => state.cart;
 export const selectCartItemById = (id: string) => (state: RootState) =>
   state.cart.items.find((obj) => obj.id === id);
+export const selectCartMatchingItem = (id, selectedOption) => (state: RootState) =>
+  state.cart.items.find((item) => item.id === id && isEqual(item.selectedOption, selectedOption));
 
 export const { addItem, removeItem, minusItem, clearItems, updateSelectedItemOptions } = cartSlice.actions;
 

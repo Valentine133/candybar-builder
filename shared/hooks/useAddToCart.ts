@@ -1,45 +1,48 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, selectCartItemById } from '@/shared/lib/redux/slices/cartSlice';
+import { addItem, selectCartItemById, selectCartMatchingItem, updateSelectedItemOptions } from '@/shared/lib/redux/slices/cartSlice';
 import { openModal } from '@/shared/lib/redux/slices/modalSlice';
-import { setLocalStorage, getLocalStorage } from '@/shared/utils/localStorage';
 import { Product } from '@/shared/lib/types/product';
+import isEqual from 'lodash/isEqual';
 
 const useAddToCart = (product: Product, id, selectedOption) => {
   const dispatch = useDispatch();
-  const cartItem = useSelector(selectCartItemById(id));
-
-  useEffect(() => {
-    if (cartItem) {
-      // Update local storage after Redux state is updated
-      const updatedCart = getLocalStorage('cart') || [];
-      updatedCart.push(cartItem);
-      setLocalStorage('cart', updatedCart);
-    }
-  }, [cartItem]);
-  
+  const cartItem = useSelector(selectCartMatchingItem(id, selectedOption));
+  // const storedCart: Product[] = getLocalStorage('cart') || [];
+  // console.log(selectedOption);
   const onClickAdd = () => {
     const existingItem = cartItem;
     
     if (existingItem) {
-      dispatch(openModal({ modalName: 'cartModal' }));
+      const optionsMatch = isEqual(existingItem.selectedOption, selectedOption);
+
+      if (optionsMatch) {
+        // Increment count if ID and options match
+        dispatch(updateSelectedItemOptions({ id, selectedOption, count: existingItem.count + 1 }));
+      } else {
+        // Add a new item if options are different
+        const newItem = {
+          id,
+          count: 1,
+          selectedOption,
+          ...product,
+        };
+        dispatch(addItem(newItem));
+        dispatch(openModal({ modalName: 'cartModal' }));
+      }
     } else {
-      const item = {
+      // Add a new item if ID is not in the cart
+      const newItem = {
         id,
         count: 1,
-        selectedOption: selectedOption,
+        selectedOption,
         ...product,
       };
-      dispatch(addItem(item));
+      dispatch(addItem(newItem));
       dispatch(openModal({ modalName: 'cartModal' }));
-
-      const updatedCart = getLocalStorage('cart') || [];
-      updatedCart.push(item);
-      setLocalStorage('cart', updatedCart);
     }
   };
 
-  return { onClickAdd, isItemInCart: !!cartItem };
+  return { onClickAdd, isItemInCart: !!cartItem, quantity: cartItem?.count || 0 };
 };
 
 export default useAddToCart;

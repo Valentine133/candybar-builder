@@ -57,7 +57,7 @@ export const CartList = () => {
 
   return (
     <div className="cart">
-      <div className="cart__list overflow-y-auto">
+      <div className="cart__list overflow-y-auto h-[70vh]">
         {items?.map((item) => (
           <div
             key={item.id}
@@ -85,14 +85,12 @@ export const CartList = () => {
                           return null;
                         }
 
-                        const selectedValues = Object.entries(
-                          item.selectedOption,
-                        ).map(
-                          ([selectedOptionKey, selectedOptionValue]) =>
-                            selectedOptionValue,
-                        );
-
-                        console.log(selectedValues);
+                        const selectedValues = item.selectedOption
+                          ? Object.entries(item.selectedOption).map(
+                              ([selectedOptionKey, selectedOptionValue]) =>
+                                selectedOptionValue,
+                            )
+                          : [];
 
                         return (
                           optionValue != null && (

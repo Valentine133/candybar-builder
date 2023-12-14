@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Product } from '@/shared/lib/types/product';
 
 import { ProductDetailsCarousel } from '@/shared/ui/productDetailsCarousel';
@@ -21,6 +21,51 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   const [showError, setShowError] = useState(false);
 
   console.log(p);
+
+  const memoizedOptions = useMemo(() => {
+    return p?.options
+      ? Object.entries(p.options).map(([optionKey, optionValue]) => {
+          if (optionKey === 'id') {
+            return null;
+          }
+
+          return (
+            optionValue != null && (
+              <div key={optionKey} className="option mb-4">
+                {/* Nested level */}
+                <h3 className="mb-2 text-lg font-semibold text-gray-800">
+                  {optionValue?.title}
+                </h3>
+                {Object.entries(optionValue).map(([nestedKey, nestedValue]) => (
+                  <div key={nestedKey} className="nested-option">
+                    {Array.isArray(nestedValue) &&
+                      nestedValue.map((item, i) => (
+                        <button
+                          key={i}
+                          className={`${
+                            selectedOption[nestedKey] === i
+                              ? 'border-purple-600 text-purple-600 bg-purple-100 hover:border-purple-600'
+                              : ''
+                          } p-2 mb-2 mr-1 rounded-md border hover:border-gray-800`}
+                          onClick={() => {
+                            setSelectedOption((prevState) => ({
+                              ...prevState,
+                              [nestedKey]: i,
+                            }));
+                            setShowError(false);
+                          }}
+                        >
+                          {item.name}
+                        </button>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            )
+          );
+        })
+      : [];
+    }, [p?.options, selectedOption]);
 
   return (
     <>
@@ -159,49 +204,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               </div>
 
               {/* Options */}
-              {p?.options &&
-                Object.entries(p.options).map(([optionKey, optionValue]) => {
-                  if (optionKey === 'id') {
-                    return null;
-                  }
-
-                  return (
-                    optionValue != null && (
-                      <div key={optionKey} className="option mb-4">
-                        {/* Nested level */}
-                        <h3 className="mb-2 text-lg font-semibold text-gray-800">
-                          {optionValue?.title}
-                        </h3>
-                        {Object.entries(optionValue).map(
-                          ([nestedKey, nestedValue]) => (
-                            <div key={nestedKey} className="nested-option">
-                              {Array.isArray(nestedValue) &&
-                                nestedValue.map((item, i) => (
-                                  <button
-                                    key={i}
-                                    className={`${
-                                      selectedOption[nestedKey] === i
-                                        ? 'border-purple-600 text-purple-600 bg-purple-100 hover:border-purple-600'
-                                        : ''
-                                    } p-2 mb-2 mr-1 rounded-md border hover:border-gray-800`}
-                                    onClick={() => {
-                                      setSelectedOption((prevState) => ({
-                                        ...prevState,
-                                        [nestedKey]: i,
-                                      }));
-                                      setShowError(false);
-                                    }}
-                                  >
-                                    {item.name}
-                                  </button>
-                                ))}
-                            </div>
-                          ),
-                        )}
-                      </div>
-                    )
-                  );
-                })}
+              {memoizedOptions}
 
               {showError && (
                 <div className="text-red-600 mb-4">
