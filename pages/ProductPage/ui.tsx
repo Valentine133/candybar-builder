@@ -23,7 +23,7 @@ export const ProductPage = ({
     isLoading,
     error,
   } = useProduct(params.productSlug as string);
-
+  console.log("ProductPage:", product?.data[0]);
   return (
     <div className="container px-4 mx-auto pt-10 pb-8">
       <nav
@@ -34,12 +34,14 @@ export const ProductPage = ({
         <p className="text-md md:text-lg">Back to category</p>
       </nav>
 
-      <ProductDetails product={product} />
+      <div className="pt-10">
+        <ProductDetails product={product?.data[0]} />
+      </div>
 
       <div className="pt-10">
         <Catalog
           title="Similar products"
-          endpoint="/api/products?populate=*"
+          endpoint="/api/products?populate=deep"
           slug={params.categorySlug}
         />
       </div>

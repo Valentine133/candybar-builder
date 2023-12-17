@@ -1,27 +1,29 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, selectCartItemById, selectCartMatchingItem, updateSelectedItemOptions } from '@/shared/lib/redux/slices/cartSlice';
+import { addItem, selectCartMatchingItem, updateSelectedItemOptions } from '@/shared/lib/redux/slices/cartSlice';
 import { openModal } from '@/shared/lib/redux/slices/modalSlice';
 import { Product } from '@/shared/lib/types/product';
+
 import isEqual from 'lodash/isEqual';
+import {generateUniqueCode} from '@/shared/utils/generateUniqueCode';
 
 const useAddToCart = (product: Product, id, selectedOption) => {
   const dispatch = useDispatch();
-  const cartItem = useSelector(selectCartMatchingItem(id, selectedOption));
-  // const storedCart: Product[] = getLocalStorage('cart') || [];
-  // console.log(selectedOption);
+  const cartMatchingItem = useSelector(selectCartMatchingItem(id, selectedOption));
+  
   const onClickAdd = () => {
-    const existingItem = cartItem;
+    const existingItem = cartMatchingItem;
+    const uniqueCode = generateUniqueCode();
     
     if (existingItem) {
       const optionsMatch = isEqual(existingItem.selectedOption, selectedOption);
 
       if (optionsMatch) {
-        // Increment count if ID and options match
         dispatch(updateSelectedItemOptions({ id, selectedOption, count: existingItem.count + 1 }));
+        dispatch(openModal({ modalName: 'cartModal' }));
       } else {
-        // Add a new item if options are different
         const newItem = {
           id,
+          uniqueCode,
           count: 1,
           selectedOption,
           ...product,
@@ -30,9 +32,9 @@ const useAddToCart = (product: Product, id, selectedOption) => {
         dispatch(openModal({ modalName: 'cartModal' }));
       }
     } else {
-      // Add a new item if ID is not in the cart
       const newItem = {
         id,
+        uniqueCode,
         count: 1,
         selectedOption,
         ...product,
@@ -42,7 +44,7 @@ const useAddToCart = (product: Product, id, selectedOption) => {
     }
   };
 
-  return { onClickAdd, isItemInCart: !!cartItem, quantity: cartItem?.count || 0 };
+  return { onClickAdd };
 };
 
 export default useAddToCart;

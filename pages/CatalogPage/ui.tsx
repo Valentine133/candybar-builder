@@ -8,7 +8,7 @@ import { Sort } from '@/features/sort';
 import {Filters } from '@/features/filters/ui';
 
 export const CatalogPage = () => {
-  const endpoint = '/api/products?populate=*';
+  const endpoint = '/api/products?populate=deep';
 
   return (
     <div className="container mx-auto px-4 pt-10">

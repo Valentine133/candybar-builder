@@ -12,6 +12,7 @@ interface CartSliceState {
 
 interface UpdateSelectedItemOptionsPayload {
   id: string;
+  uniqueCode: string;
   selectedOption: string;
   count?: number;
 }
@@ -37,29 +38,35 @@ const cartSlice = createSlice({
         state.items.push({ id, selectedOption, ...items });
       }
 
-      // Save the updated cart data to local storage
       setLocalStorage('cart', state.items);
       state.totalPrice = calcTotalPrice(state.items);
     },
+    plusItem(state, action: PayloadAction<Product>) {
+      const findItem = state.items.find((obj) => obj.uniqueCode === action.payload);
+
+      if (findItem) {
+         findItem.count++;
+
+        setLocalStorage('cart', state.items);
+        state.totalPrice = calcTotalPrice(state.items);
+      }
+    },
     minusItem(state, action: PayloadAction<string>) {
-      const findItem = state.items.find((obj) => obj.id === action.payload);
+      const findItem = state.items.find((obj) => obj.uniqueCode === action.payload);
 
       if (findItem) {
         findItem.count--;
         if (findItem.count === 0) {
-          // Remove the item from the cart if count becomes 0
-          state.items = state.items.filter((obj) => obj.id !== action.payload);
+          state.items = state.items.filter((obj) => obj.uniqueCode !== action.payload);
         }
 
-        // Save the updated cart data to local storage
         setLocalStorage('cart', state.items);
         state.totalPrice = calcTotalPrice(state.items);
       }
     },
     removeItem(state, action: PayloadAction<string>) {
-      state.items = state.items.filter((obj) => obj.id !== action.payload);
+      state.items = state.items.filter((obj) => obj.uniqueCode !== action.payload);
 
-      // Save the updated cart data to local storage
       setLocalStorage('cart', state.items);
       state.totalPrice = calcTotalPrice(state.items);
     },
@@ -71,16 +78,29 @@ const cartSlice = createSlice({
       state.totalPrice = 0;
     },
     updateSelectedItemOptions: (state, action: PayloadAction<UpdateSelectedItemOptionsPayload>) => {
-      const { id, selectedOption, count } = action.payload;
+      const { id, uniqueCode, selectedOption, count } = action.payload;
       const selectedItem = state.items.find((item) => item.id === id && isEqual(item.selectedOption, selectedOption));
 
-      if (selectedItem) {
-        selectedItem.selectedOption = selectedOption;
+      state.items = state.items.map((item) => {
+        if (item.id === id && item.uniqueCode === uniqueCode) {
+          return {
+            ...item,
+            selectedOption,
+            count: count !== undefined ? count : item.count,
+          };
+        } else if (selectedItem) {
+          selectedItem.count = count !== undefined ? count : selectedItem.count;
+          // selectedItem.selectedOption = selectedOption;
 
-        if (count !== undefined) {
-          selectedItem.count = count;
+          // if (count !== undefined) {
+          //   selectedItem.count = count;
+          // }
         }
-      }
+        return item;
+      });
+
+      setLocalStorage('cart', state.items);
+      state.totalPrice = calcTotalPrice(state.items);
     },
   },
 });
@@ -90,7 +110,15 @@ export const selectCartItemById = (id: string) => (state: RootState) =>
   state.cart.items.find((obj) => obj.id === id);
 export const selectCartMatchingItem = (id, selectedOption) => (state: RootState) =>
   state.cart.items.find((item) => item.id === id && isEqual(item.selectedOption, selectedOption));
+export const calculateTotalQuantityById = (id: string) => (state: RootState) => {
+  return state.cart.items.reduce((totalQuantity, item) => {
+    if (item.id === id) {
+      totalQuantity += item.count || 0;
+    }
+    return totalQuantity;
+  }, 0);
+};
 
-export const { addItem, removeItem, minusItem, clearItems, updateSelectedItemOptions } = cartSlice.actions;
+export const { addItem, removeItem, plusItem, minusItem, clearItems, updateSelectedItemOptions } = cartSlice.actions;
 
 export default cartSlice.reducer;

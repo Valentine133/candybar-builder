@@ -1,5 +1,3 @@
-// components/Catalog.tsx
-
 import React from 'react';
 import { ProductList } from '@/entities/products';
 import useProducts from '@/shared/hooks/useProducts';
@@ -16,7 +14,7 @@ export const Catalog: React.FC<ProductsProps> = ({ title, endpoint, slug }) => {
     ? `&[filters][categories][slug][$eq]=${slug}`
     : '';
   const fullEndpoint = `${endpoint}${categoryFilter}`;
-
+  
   const {
     data: products,
     error,
@@ -34,7 +32,7 @@ export const Catalog: React.FC<ProductsProps> = ({ title, endpoint, slug }) => {
 };
 
 export async function getStaticProps() {
-  const endpoint = '/api/products?populate=*';
+  const endpoint = '/api/products?populate=deep';
 
   try {
     const res = await fetcher(endpoint);

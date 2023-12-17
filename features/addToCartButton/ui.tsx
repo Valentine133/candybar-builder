@@ -1,11 +1,20 @@
-import React from 'react'
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useAddToCart from '@/shared/hooks/useAddToCart';
+import {
+  calculateTotalQuantityById,
+  selectCartItemById,
+} from '@/shared/lib/redux/slices/cartSlice';
 import { Button } from '@/shared/ui/buttons/simple-btn';
 import { BsFillCartCheckFill, BsCart } from 'react-icons/bs';
 
 export const AddToCartButton = ({ product, id, selectedOption, error }) => {
-  const { onClickAdd, isItemInCart, quantity } = useAddToCart(product, id, selectedOption);
+  const { onClickAdd } = useAddToCart(product, id, selectedOption);
+  const totalQuantity = useSelector(calculateTotalQuantityById(id));
+  const cartItem = useSelector(selectCartItemById(id));
+
+  const isItemInCart = !!cartItem;
 
   const countNestedProperties = (obj) => {
     return obj
@@ -25,8 +34,6 @@ export const AddToCartButton = ({ product, id, selectedOption, error }) => {
   const numberOfNestedProperties = countNestedProperties(product?.options);
 
   const handleAddToCart = () => {
-    // console.log('First:', numberOfNestedProperties);
-    // console.log('Second', Object.keys(selectedOption).length);
     if (numberOfNestedProperties == Object.keys(selectedOption).length) {
       onClickAdd();
     } else {
@@ -35,12 +42,12 @@ export const AddToCartButton = ({ product, id, selectedOption, error }) => {
   };
 
   return (
-    <Button as="button" customClass="h-[3rem]" onClick={handleAddToCart}>
+    <Button as="button" customClass="h-[3rem] w-full" onClick={handleAddToCart}>
       {isItemInCart ? (
         <>
           <BsFillCartCheckFill size="20" />{' '}
           <span className="bg-purple-100 text-purple-600 aspect-square h-[1.2rem] rounded-full">
-            {quantity}
+            {totalQuantity}
           </span>
         </>
       ) : (

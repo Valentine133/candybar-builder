@@ -8,7 +8,7 @@ import { DndDecorView } from '@/widgets/dndDecorView';
 import { Cart } from '@/widgets/cart';
 
 export const BuilderPage = () => {
-  const endpoint = '/api/products?populate=*';
+  const endpoint = '/api/products?populate=deep';
   const [backgroundImageUrl] = useState('images/empty-template-1.jpg');
 
   return (

@@ -9,12 +9,14 @@ interface CommonModalProps {
   children: React.ReactNode;
   openStyle?: 'center' | 'left' | 'right';
   modalName: string;
+  modalWindowClass?: string;
 }
 
 export const CommonModal: FC<CommonModalProps> = ({
   children,
   openStyle = 'center',
   modalName,
+  modalWindowClass,
 }) => {
   const dispatch = useDispatch();
   const isOpen = useSelector(selectIsOpen(modalName));
@@ -33,35 +35,39 @@ export const CommonModal: FC<CommonModalProps> = ({
       top: '50%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      height: 'auto',
+      maxWidth: '100%',
+      maxHeight: '80vh',
       borderRadius: '20px',
+      overflow: 'auto',
     },
     left: {
       top: '0',
       left: '0',
       transform: 'translateX(0)',
+      width: '400px',
     },
     right: {
       top: '0',
       right: '0',
       transform: 'translateX(0)',
+      width: '400px',
     },
   }[openStyle];
 
   return (
     <div
-      className={`modal top-0 z-20 fixed h-full w-full ${modalClass} duration-300 ease-in-out`}
+      className={`modal top-0 left-0 z-50 fixed h-full w-full ${modalClass} duration-300 ease-in-out`}
     >
       <div
         className={`fixed h-full w-full bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out`}
         onClick={handleModalClose}
       ></div>
       <div
-        className={`absolute bg-white h-full w-full md:w-[400px] pt-[5rem] px-4 transition-transform duration-300 ease-in-out ${
+        className={`absolute bg-white h-full w-full pt-[4rem] px-4 pb-4 transition-transform duration-300 ease-in-out ${
           isOpen
             ? 'opacity-100 translate-x-0 pointer-events-auto'
             : 'opacity-0 translate-x-full pointer-events-none'
-        }`}
+        } ${modalWindowClass}`}
         style={modalStyles}
       >
         <Button

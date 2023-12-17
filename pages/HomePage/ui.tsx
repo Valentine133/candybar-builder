@@ -7,7 +7,7 @@ import { Catalog } from '@/widgets/catalog';
 
 export const HomePage = () => {
   const [backgroundImageUrl] = useState('images/candy-bar-2.jpg');
-  const endpoint = '/api/products?populate=*';
+  const endpoint = '/api/products?populate=deep';
   
   return (
     <>

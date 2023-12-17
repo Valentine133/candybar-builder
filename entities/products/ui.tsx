@@ -20,7 +20,7 @@ export const ProductList: React.FC<ProductListProps> = ({
   const skeletons = [...new Array(8)].map((_, index) => (
     <SkeletonProduct key={index} />
   ));
-
+    console.log(products);
   return (
     <section>
       {title && <h2 className="text-3xl mb-6 font-semibold">{title}</h2>}

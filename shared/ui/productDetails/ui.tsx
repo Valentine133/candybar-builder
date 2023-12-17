@@ -8,19 +8,17 @@ import Head from 'next/head';
 import { getDiscountedPricePercentage } from '@/shared/utils/getDiscountedPricePercentage';
 
 type ProductDetailsProps = {
-  product: { attributes: Product };
+  product: Product;
 };
 
 export const ProductDetails: React.FC<ProductDetailsProps> = ({
   product
 }) => {
-  const p = product?.data?.[0]?.attributes;
-  const id = product?.data?.[0]?.id;
+  const p = product?.attributes;
+  const id = product?.id;
 
   const [selectedOption, setSelectedOption] = useState({});
   const [showError, setShowError] = useState(false);
-
-  console.log(p);
 
   const memoizedOptions = useMemo(() => {
     return p?.options
@@ -31,7 +29,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
 
           return (
             optionValue != null && (
-              <div key={optionKey} className="option mb-4">
+              <div key={optionKey} className="option mb-2">
                 {/* Nested level */}
                 <h3 className="mb-2 text-lg font-semibold text-gray-800">
                   {optionValue?.title}
@@ -74,9 +72,9 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         <meta name="description" content={p?.description} />
       </Head>
 
-      <section className="pt-10">
+      <section className="product__details">
         <div className="flex flex-wrap -mx-4">
-          <div className="w-full px-4 mb-8 md:w-1/2 md:mb-0">
+          <div className="w-full px-4 mb-8 lg:w-1/2 lg:mb-0">
             <div className="sticky top-[5rem] lg:col-span-3 lg:row-end-1">
               {p?.image?.data ? (
                 <ProductDetailsCarousel
@@ -94,7 +92,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               )}
             </div>
           </div>
-          <div className="w-full px-4 md:w-1/2">
+          <div className="w-full px-4 lg:w-1/2">
             <div className="lg:pl-20">
               <div className="mb-6">
                 <div className="flex items-center mb-6">
@@ -180,37 +178,44 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   {p?.title}
                 </h2>
 
-                <div className="mb-6">
-                  {p?.description?.[0]?.children?.[0]?.text}
-                </div>
-
-                <p className="flex w-full text-3xl font-semibold text-gray-700 dark:text-gray-400 ">
-                  <span>${p?.price}</span>
-                  {p?.original_price && (
-                    <>
-                      <span className="text-lg ml-3 text-base font-normal text-gray-500 line-through dark:text-gray-400">
+                <p className="flex items-end w-full text-3xl font-semibold text-gray-700">
+                  <span className="flex flex-col gap-1">
+                    {p?.original_price && (
+                      <span className="text-lg font-medium text-gray-500 line-through">
                         ${p?.original_price}
                       </span>
-                      <span className="ml-auto text-red-600">
-                        {getDiscountedPricePercentage(
-                          p.original_price,
-                          p.price,
-                        )}
-                        % off
-                      </span>
-                    </>
+                    )}
+                    ${p?.price}
+                  </span>
+                  {p?.original_price && (
+                    <span className="text-3xl ml-auto text-red-600">
+                      {getDiscountedPricePercentage(p.original_price, p.price)}%
+                      off
+                    </span>
                   )}
                 </p>
               </div>
 
               {/* Options */}
-              {memoizedOptions}
+              <div className={`options ${showError ? 'border border-red-500 rounded-md pt-2 px-2' : ''}`}>{memoizedOptions}</div>
 
               {showError && (
-                <div className="text-red-600 mb-4">
+                <div className="text-red-600 mt-2 mb-4">
                   Option selection is required
                 </div>
               )}
+
+              <div className="flex flex-wrap items-center mt-4 mb-6">
+                <AddToCartButton
+                  product={p}
+                  id={id}
+                  selectedOption={selectedOption}
+                  error={setShowError}
+                />
+              </div>
+              <div className="mb-6">
+                {p?.description?.[0]?.children?.[0]?.text}
+              </div>
               <div className="py-6 mb-6 border-t border-b border-gray-200 dark:border-gray-700">
                 <span className="text-base text-green-600 font-semibold dark:text-gray-400">
                   In Stock
@@ -220,31 +225,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                     Production time 3-5 days
                   </span>
                 </p>
-              </div>
-              <div className="mb-6 "></div>
-              <div className="flex flex-wrap items-center">
-                <div className="mr-4 lg:mb-0">
-                  <div className="cart__item-count mt-auto relative flex flex-row w-[7rem] h-9 bg-transparent border border-gray-300 rounded-lg overflow-hidden">
-                    <button className="w-20 h-full text-gray-600 bg-white border-r rounded-l outline-none cursor-pointer dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-400 hover:text-gray-700 dark:bg-gray-900 hover:bg-gray-300">
-                      <span className="m-auto text-2xl font-thin">-</span>
-                    </button>
-                    <input
-                      type="number"
-                      max="100"
-                      className="flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-white outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none text-md hover:text-black"
-                      placeholder="1"
-                    />
-                    <button className="w-20 h-full text-gray-600 bg-white border-l rounded-r outline-none cursor-pointer dark:border-gray-700 hover:text-gray-700 hover:bg-gray-300">
-                      <span className="m-auto text-2xl font-thin">+</span>
-                    </button>
-                  </div>
-                </div>
-                <AddToCartButton
-                  product={p}
-                  id={id}
-                  selectedOption={selectedOption}
-                  error={setShowError}
-                />
               </div>
             </div>
           </div>

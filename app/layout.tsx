@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 import { ComposedProviders } from '@/app/providers/composedProviders';
+import CloseModalsOnRouteChange from '@/shared/utils/closeModalsOnRouteChange';
 
 import { Navbar } from '@/widgets/navbar';
 import { Footer } from '@/shared/ui/footer';
@@ -23,10 +24,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={montserrat.className}>
         <ComposedProviders>
+          <CloseModalsOnRouteChange/>
           <header className="sticky top-0 z-50">
             <Navbar />
           </header>
-          <main className="overflow-hidden md:overflow-visible">
+          <main className="overflow-hidden md:overflow-visible min-h-[80vh]">
             {children}
           </main>
           <footer>

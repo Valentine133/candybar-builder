@@ -4,42 +4,31 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectCart,
-  addItem,
-  minusItem,
   removeItem,
   clearItems,
   updateSelectedItemOptions,
 } from '@/shared/lib/redux/slices/cartSlice';
 import { Button } from '@/shared/ui/buttons/simple-btn';
+import { QuantityControl } from '@/features/quantityControl';
 import { calcTotalPrice } from '@/shared/utils/calcTotalPrice';
+import { generateUniqueCode } from '@/shared/utils/generateUniqueCode';
 import Link from 'next/link';
 
 import { HiOutlineTrash } from 'react-icons/hi';
-import { getLocalStorage, setLocalStorage } from '@/shared/utils/localStorage';
+import { setLocalStorage } from '@/shared/utils/localStorage';
 
 export const CartList = () => {
   const dispatch = useDispatch();
   const { items } = useSelector(selectCart);
-
-  const total = calcTotalPrice(items);
+  // console.log(items);
+  const total = calcTotalPrice(items);  
 
   useEffect(() => {
     setLocalStorage('cart', items);
   }, [items]);
 
-  const onClickPlus = (id: string) => {
-    dispatch(addItem({ id }));
-  };
-
-  const onClickMinus = (id: string) => {
-    const item = items.find((obj) => obj.id === id);
-    if (item && item.count > 1) {
-      dispatch(minusItem(id));
-    }
-  };
-
-  const handleRemoveItem = (id: string) => {
-    dispatch(removeItem(id));
+  const handleRemoveItem = (uniqueCode: string) => {
+    dispatch(removeItem(uniqueCode));
   };
 
   const handleClearItems = () => {
@@ -57,10 +46,10 @@ export const CartList = () => {
 
   return (
     <div className="cart">
-      <div className="cart__list overflow-y-auto h-[70vh]">
+      <div className="cart__list overflow-y-auto">
         {items?.map((item) => (
           <div
-            key={item.id}
+            key={item.uniqueCode}
             className="cart__item p-2 flex bg-white border-b border-gray-100"
           >
             <div className="cart__item--image pr-2 w-32">
@@ -103,7 +92,7 @@ export const CartList = () => {
                                 ([nestedKey, nestedValue]) =>
                                   Array.isArray(nestedValue) && (
                                     <select
-                                      key={nestedKey}
+                                      key={generateUniqueCode()}
                                       className="nested-option cursor-pointer"
                                       onChange={(e) => {
                                         const selectedOption = {
@@ -113,6 +102,7 @@ export const CartList = () => {
                                         dispatch(
                                           updateSelectedItemOptions({
                                             id: item.id,
+                                            uniqueCode: item.uniqueCode,
                                             selectedOption,
                                           }),
                                         );
@@ -120,7 +110,7 @@ export const CartList = () => {
                                     >
                                       {nestedValue.map((item, i) => (
                                         <option
-                                          key={i}
+                                          key={item.id}
                                           value={item.name}
                                           selected={selectedValues.includes(i)}
                                         >
@@ -136,32 +126,12 @@ export const CartList = () => {
                       },
                     )}
                 </div>
-                <div className="cart__item-count mt-auto relative flex flex-row w-[7rem] h-8 bg-transparent border border-gray-300 rounded-lg overflow-hidden">
-                  <button
-                    className="w-20 h-full text-gray-600 bg-white border-r rounded-l outline-none cursor-pointer dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-400 hover:text-gray-700 dark:bg-gray-900 hover:bg-gray-300"
-                    disabled={item.count === 1}
-                    onClick={() => onClickMinus(item.id)}
-                  >
-                    <span className="m-auto text-2xl font-thin">-</span>
-                  </button>
-                  <input
-                    type="number"
-                    max="100"
-                    className="flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-white outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none text-md hover:text-black"
-                    placeholder={item.count.toString()}
-                  />
-                  <button
-                    className="w-20 h-full text-gray-600 bg-white border-l rounded-r outline-none cursor-pointer dark:border-gray-700 hover:text-gray-700 hover:bg-gray-300"
-                    onClick={() => onClickPlus(item.id)}
-                  >
-                    <span className="m-auto text-2xl font-thin">+</span>
-                  </button>
-                </div>
+                <QuantityControl uniqueCode={item.uniqueCode} />
               </div>
               <div className="cart__item--price flex flex-col font-medium items-end">
                 <div
                   className="w-4 h-4 mb-6 hover:text-red-500 rounded-full cursor-pointer text-red-300"
-                  onClick={() => handleRemoveItem(item.id)}
+                  onClick={() => handleRemoveItem(item.uniqueCode)}
                 >
                   <HiOutlineTrash size="20" />
                 </div>
@@ -178,7 +148,7 @@ export const CartList = () => {
         </div>
       </div>
       <div className="p-2 justify-center flex">
-        <Button href="/checkout" as={Link} customClass="min-w-full">
+        <Button href="/cart" as={Link} customClass="min-w-full">
           Checkout
         </Button>
       </div>

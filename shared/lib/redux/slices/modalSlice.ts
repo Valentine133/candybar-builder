@@ -24,10 +24,15 @@ const modalSlice = createSlice({
       const { modalName } = action.payload;
       state.modals[modalName] = !state.modals[modalName];
     },
+    closeAllModals: (state) => {
+      Object.keys(state.modals).forEach((modalName) => {
+        state.modals[modalName] = false;
+      });
+    },
   },
 });
 
-export const { openModal, closeModal, toggleModal } = modalSlice.actions;
+export const { openModal, closeModal, toggleModal, closeAllModals } = modalSlice.actions;
 export const selectIsOpen = (modalName: string) => (state: { modal: ModalState }) =>
   state.modal.modals[modalName] || false;
 export default modalSlice.reducer;

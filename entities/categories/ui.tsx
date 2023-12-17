@@ -12,7 +12,6 @@ export const CategoryList: React.FC<CategoryListProps> = ({
   error,
   isLoading,
 }) => {
-  // console.log(categories);
   return (
     <section>
       {isLoading && <div className="text-gray-700">Loading...</div>}
