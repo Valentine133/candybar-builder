@@ -45,12 +45,14 @@ export const CommonModal: FC<CommonModalProps> = ({
       left: '0',
       transform: 'translateX(0)',
       width: '400px',
+      maxWidth: '100%',
     },
     right: {
       top: '0',
       right: '0',
       transform: 'translateX(0)',
       width: '400px',
+      maxWidth: '100%',
     },
   }[openStyle];
 

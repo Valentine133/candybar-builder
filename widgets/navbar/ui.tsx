@@ -58,7 +58,7 @@ export const Navbar = () => {
           <div className="flex ml-5">
             <ModalButton style="default" modalName="mobileMenuModal">
               <HiOutlineMenuAlt1 size={20} />
-              Categories
+              Menu
             </ModalButton>
           </div>
 
@@ -84,6 +84,7 @@ export const Navbar = () => {
         <CartList />
       </CommonModal>
       <CommonModal openStyle="left" modalName="mobileMenuModal">
+        <h3 className="text-lg font-semibold mb-3">Categories</h3>
         <CategoryList categories={categories} error={error} isLoading={isLoading}/>
       </CommonModal>
     </>

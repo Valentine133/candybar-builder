@@ -23,7 +23,7 @@ export const CategoryPage = ({
   return (
     <div className="container mx-auto px-4 py-10">
       <h1 className="text-3xl text-center mb-6 font-semibold">{c?.title}</h1>
-      <Catalog endpoint="/api/products?populate=*" slug={slug} />
+      <Catalog endpoint="/api/products?populate=deep" slug={slug} />
     </div>
   );
 };
@@ -43,7 +43,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         },
         products,
       },
-      revalidate: 60, // Adjust revalidation interval as needed
+      revalidate: 60,
     };
   } catch (error) {
     return {
